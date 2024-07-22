@@ -49,3 +49,31 @@ const productData = () => {
         }
     }
 }
+
+const filterData = () => {
+    return {
+        categories: [],
+        filterOption: 'All categories',
+        dropdownVisible: false,
+
+        initializeCategories() {
+            this.fetchCategories();
+        },
+    
+        async fetchCategories() {
+            try {
+                const response = await fetch("https://fakestoreapi.com/products/categories");
+                const data = await response.json();
+                this.categories = data;
+            } catch (error) {
+                this.error = 'Failed to fetch categories';
+            }
+        },
+
+        toggleDropdown() {
+            this.dropdownVisible = !this.dropdownVisible;
+        }
+    }
+}
+    
+    
