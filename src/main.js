@@ -21,8 +21,9 @@ const productData = () => {
                 const data = await response.json();
                 console.log(data)
                 this.products = data;
+                this.loading = false;
             } catch (err) {
-               this.error = err;
+               this.error = "Failed to fetch products";
                this.loading = false;
             } finally {
                 this.loading = false;
