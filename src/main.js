@@ -148,6 +148,7 @@ const filterData = () => {
 
         selectCategory(category) {
             this.filterOption = category;
+            this.dropdownVisible = false;
             this.$dispatch('category-changed', category)
             console.log(this.filterOption)
         }
