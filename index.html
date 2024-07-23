@@ -215,7 +215,10 @@
                 <!-- Product list -->
                 <div x-show="!loading" class="lg:max-h-[130rem] max-w-xl mx-auto grid gap-4 grid-cols-1 lg:grid-cols-4 md:grid-cols-2 items-center lg:max-w-none my-4">
                     <template x-for="product in products" :key="product.id">
-                        <div class="flex flex-col max-h-[130rem] cursor-pointer max-w-80 hover:-translate-y-1 hover:scale-105 duration-500 bg-white border border-slate-200 shadow shadow-slate-950/5 rounded-2xl overflow-hidden">
+                        <div 
+                            @click="openModal(product)"
+                            class="flex flex-col max-h-[130rem] cursor-pointer max-w-80 hover:-translate-y-1 hover:scale-105 duration-500 bg-white border border-slate-200 shadow shadow-slate-950/5 rounded-2xl overflow-hidden"
+                        >
                             <img class="object-contain h-48 mt-3" :src="product.image" alt="Product Image" />
                             <div class="flex-1 flex flex-col p-6">
                                 <div class="flex-1">
@@ -235,7 +238,7 @@
                                         <span class="inline-flex items-center rounded-md bg-blue-50 px-2 py-1 text-xs font-medium text-blue-700 ring-1 ring-inset ring-blue-700/10" x-text="product.category"></span>
                                     </div>
                                     <div class="justify-end space-x-2">
-                                        <button @click.stop>
+                                        <button>
                                             <svg class="me-1.5 h-5 w-5 hover:fill-red-500" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="none" viewBox="0 0 24 24" transform="scale(1.6)">
                                                 <path stroke="currentColor" strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M12.01 6.001C6.5 1 1 8 5.782 13.001L12.011 20l6.23-7C23 8 17.5 1 12.01 6.002Z" />
                                             </svg>
@@ -248,6 +251,38 @@
                             </div>
                         </div>
                     </template>
+                </div>
+            </div>
+
+                <!-- Modal Component -->
+            <div x-show="showModal" @click.self="closeModal()" class="fixed inset-0 flex items-center justify-center z-50 bg-black bg-opacity-50">
+                <div class="bg-white rounded-lg p-4 max-w-lg w-full relative">
+                    <!-- Loading state -->
+                    <div x-show="loading" class="text-center">
+                        Loading...
+                    </div>
+
+                    <!-- Error message -->
+                    <div x-show="error" x-text="error" class="text-center text-red-500"></div>
+
+                    <!-- Product details -->
+                    <div x-show="!loading && showModal">
+                        <img :src="modalProduct.image" alt="Product Image" class="w-full h-64 object-contain mb-4">
+                        <h1 class="text-2xl font-bold mb-2" x-text="modalProduct.title"></h1>
+                        <div class="flex gap-2 mb-2" x-show="modalProduct.rating">
+                            <svg class="w-4 h-4 text-yellow-300" xmlns="http://www.w3.org/2000/svg" fill="currentColor" viewBox="0 0 22 20">
+                                <path d="M20.924 7.625a1.523 1.523 0 0 0-1.238-1.044l-5.051-.734-2.259-4.577a1.534 1.534 0 0 0-2.752 0L7.365 5.847l-5.051.734A1.535 1.535 0 0 0 1.463 9.2l3.656 3.563-.863 5.031a1.532 1.532 0 0 0 2.226 1.616L11 17.033l4.518 2.375a1.534 1.534 0 0 0 2.226-1.617l-.863-5.03L20.537 9.2a1.523 1.523 0 0 0 .387-1.575Z" />
+                            </svg>
+                            <div x-text="modalProduct.rating.rate"></div>
+                            <div>Reviews: <span x-text="modalProduct.rating.count"></span></div>
+                        </div>
+                        <span class="inline-flex items-center rounded-md bg-gray-50 px-2 py-1 text-xs font-medium text-gray-600 ring-1 ring-inset ring-gray-500/10" x-text="modalProduct.category"></span>
+                        <h3 class="text-xl font-bold mt-2 mb-2">$<span x-text="modalProduct.price"></span></h3>
+                        <button class="bg-cyan-700 hover:bg-cyan-900 w-full text-white font-bold py-2 px-4 rounded mb-2">Add To Cart</button>
+                        <h2 class="text-lg font-bold">Description</h2>
+                        <p x-text="modalProduct.description"></p>
+                        <button @click="closeModal()" class="absolute top-2 right-2 text-gray-700 hover:text-gray-900">&times;</button>
+                    </div>
                 </div>
             </div>
         </main>
